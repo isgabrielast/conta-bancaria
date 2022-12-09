@@ -53,24 +53,18 @@ public class Account {
     public Client getClient() {
         return client;
     }
-
     public void setClient(Client client) {
         this.client = client;
     }
-
-
     public void add(Transaction transaction){
         transactions.add(transaction);
     }
-    public void deposit(){
-        for (Transaction a : transactions){
-            balanceAccount = balanceAccount.add(a.getDepositValue());
-        }
+    public void deposit(BigDecimal depositValue){
+         balanceAccount = balanceAccount.add(depositValue);
     }
-    public void withdraw(){
-        for (Transaction a : transactions){
-            balanceAccount = balanceAccount.subtract(a.getWithdrawsValue());
-        }
+    public void withdraw(BigDecimal withdrawValue){
+        balanceAccount = balanceAccount.subtract(withdrawValue);
+
     }
     public boolean passwordVerification(String numberAccount, String passwordAccount){
         return this.numberAccount.equals(numberAccount) && this.passwordAccount.equals(passwordAccount);

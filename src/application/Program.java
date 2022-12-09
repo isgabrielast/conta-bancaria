@@ -4,7 +4,6 @@ import entities.Account;
 import entities.Client;
 import entities.Transaction;
 import entities.enums.TransactionType;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -42,7 +41,7 @@ public class Program {
 
         int accNumber = (int) (Math.random() * 10000 + 1000);
 
-        String accPassword = randomName(5);
+        String accPassword = passwordGenerator(5);
 
         System.out.println();
         System.out.print("Qual o valor do primeiro depósito? ");
@@ -72,6 +71,9 @@ public class Program {
         }
 
         System.out.println();
+
+        int c;
+        do {
         System.out.println("O que você deseja fazer?");
         System.out.print("SAQUE(1) - DEPOSITO(2) - TRANSFERÊNCIA(3) ");
         int option1 = input.nextInt();
@@ -86,14 +88,14 @@ public class Program {
                     BigDecimal transactionValue = BigDecimal.valueOf(input.nextDouble());
                     while (account.getBalanceAccount().compareTo(transactionValue) < 0){
                         System.out.println("Saldo insuficiente!");
-                        System.out.printf("Seu saldo atual é: R$ %.2f \n" + account.getBalanceAccount());
+                        System.out.printf("Seu saldo atual é: R$ %.2f%n",  account.getBalanceAccount());
                         System.out.print("Digite novamente o valor do saque: ");
                         transactionValue = BigDecimal.valueOf(input.nextDouble());
                     }
+                    account.withdraw(transactionValue);
                     Transaction transaction = new Transaction(LocalDateTime.now(), transactionValue);
                     account.add(transaction);
                 }
-                account.withdraw();
             }
             else {
                 System.out.println("Quantos depósitos você deseja fazer?");
@@ -101,10 +103,10 @@ public class Program {
                 for (int i = 0; i < amountDeposit; i++){
                     System.out.print("Digite o valor: ");
                     BigDecimal transactionValue = BigDecimal.valueOf(input.nextDouble());
+                    account.deposit(transactionValue);
                     Transaction transaction = new Transaction(transactionValue, LocalDateTime.now());
                     account.add(transaction);
                 }
-                account.deposit();
             }
         }
         else {
@@ -118,7 +120,7 @@ public class Program {
                     BigDecimal transactionValue = BigDecimal.valueOf(input.nextDouble());
                     while (account.getBalanceAccount().compareTo(transactionValue) < 0){
                         System.out.println("Saldo insuficiente!");
-                        System.out.printf("Seu saldo atual é: R$ %.2f \n" + account.getBalanceAccount());
+                        System.out.printf("Seu saldo atual é: R$ %.2f %n", account.getBalanceAccount());
                         System.out.print("Digite novamente o valor do PIX: ");
                         transactionValue = BigDecimal.valueOf(input.nextDouble());
                     }
@@ -126,8 +128,10 @@ public class Program {
                             TransactionType.PIX);
                     transaction.withdrawsValue();
                     account.add(transaction);
+                    account.withdraw(transaction.getWithdrawsValue());
+
                 }
-                account.withdraw();
+
             }
             else if (option2 == 2) {
                 System.out.print("Quantos TED_COMUM você deseja fazer? ");
@@ -137,7 +141,7 @@ public class Program {
                     BigDecimal transactionValue = BigDecimal.valueOf(input.nextDouble());
                     while (account.getBalanceAccount().compareTo(transactionValue) < 0){
                         System.out.println("Saldo insuficiente!");
-                        System.out.printf("Seu saldo atual é: R$ %.2f \n" + account.getBalanceAccount());
+                        System.out.printf("Seu saldo atual é: R$ %.2f%n", account.getBalanceAccount());
                         System.out.print("Digite novamente o valor do TED_COMUM: ");
                         transactionValue = BigDecimal.valueOf(input.nextDouble());
                     }
@@ -145,8 +149,8 @@ public class Program {
                             TransactionType.TED_COMUM);
                     transaction.withdrawsValue();
                     account.add(transaction);
+                    account.withdraw(transaction.getWithdrawsValue());
                 }
-                account.withdraw();
             }
             else {
                 System.out.print("Quantos TED_PRO você deseja fazer? ");
@@ -156,7 +160,7 @@ public class Program {
                     BigDecimal transactionValue = BigDecimal.valueOf(input.nextDouble());
                     while (account.getBalanceAccount().compareTo(transactionValue) < 0){
                         System.out.println("Saldo insuficiente!");
-                        System.out.printf("Seu saldo atual é: R$ %.2f \n" + account.getBalanceAccount());
+                        System.out.printf("Seu saldo atual é: R$ %.2f%n", account.getBalanceAccount());
                         System.out.print("Digite novamente o valor do TED_PRO: ");
                         transactionValue = BigDecimal.valueOf(input.nextDouble());
                     }
@@ -164,10 +168,14 @@ public class Program {
                             TransactionType.TED_PRO);
                     transaction.withdrawsValue();
                     account.add(transaction);
+                    account.withdraw(transaction.getWithdrawsValue());
                 }
-                account.withdraw();
             }
         }
+            System.out.println("Deseja fazer mais uma transação? SIM (1) : NÃO (2)");
+            c = input.nextInt();
+        }while (c != 2);
+
         System.out.println();
         System.out.print("Você deseja visualizar seu extrato? SIM (1) : NÃO (2) ");
         int option3 = input.nextInt();
@@ -177,9 +185,10 @@ public class Program {
             System.out.println("Data Extrato: " + LocalDateTime.now().format(Account.FMT));
             System.out.println(account);
         }
+        
         input.close();
     }
-    public static String randomName(int n) {
+    public static String passwordGenerator(int n) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i< n; i++) {
 
@@ -195,7 +204,6 @@ public class Program {
                 sb.append(String.format("%s", letters[x]).toLowerCase());
                 sb.append(caracteres[z]);
             }
-
 
         }
         return sb.toString();
