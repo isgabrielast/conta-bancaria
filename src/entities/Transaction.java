@@ -4,11 +4,27 @@ import entities.enums.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Classe que simula uma transação
+ * @author gabrielaxavier
+ * @version 1.0
+ */
 public class Transaction {
+    /**
+     * valor do depósito
+     */
     private BigDecimal depositValue;
+    /**
+     * valor de saque
+     */
     private BigDecimal withdrawsValue;
+    /**
+     * data da transação
+     */
     private LocalDateTime transactionDate;
-
+    /**
+     * @see TransactionType associação de classe enum
+     */
     private TransactionType transactionType;
 
     public Transaction() {
@@ -32,25 +48,20 @@ public class Transaction {
         return depositValue;
     }
 
-    public void setDepositValue(BigDecimal depositValue) {
-        this.depositValue = depositValue;
-    }
 
     public BigDecimal getWithdrawsValue() {
         return withdrawsValue;
     }
 
-    public void setWithdrawsValue(BigDecimal withdrawsValue) {
-        this.withdrawsValue = withdrawsValue;
-    }
 
     public LocalDateTime getTransactionDate() {
         return transactionDate;
     }
-
-    public void setTransactionDate(LocalDateTime transactionDate) {
-        this.transactionDate = transactionDate;
-    }
+    
+    /**
+     * Faz a verificação da opção escolhida como transferência com if
+     * e adiciona um valor para cada opção escolhida
+     */
     public void withdrawsValue(){
         if (transactionType == TransactionType.PIX){
             withdrawsValue = withdrawsValue.add(BigDecimal.valueOf(5.45));
